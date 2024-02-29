@@ -1,20 +1,46 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss'
 
 const config: Config = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
+    colors: {
+      white: '#ffffff',
+      lt_circle_gray: '#E3E4F1',
+      dt_circle_gray: '#393A4B',
+
+      lt_list_text: '#494C6B',
+      dt_list_text: '#C8CBE7',
+
+      dt_list_bg: '#25273D',
+
+      lt_veryLightGray: '#FAFAFA',
+      lt_veryLightGrayishBlue: '#F2F2F2',
+      lt_lightGrayishBlue: '#D9DBE9',
+      lt_darkGrayishBlue: '#6E7E85',
+      lt_veryDarkGrayishBlue: '#4F5D75',
+
+      dt_veryDarkBlue: '#1E213A',
+      dt_veryDarkDesaturatedBlue: '#121721',
+      dt_lightGrayishBlue: '#E9EDF0',
+      dt_lightGrayishBlueHover: '#F2F2F2',
+      dt_darkGrayishBlueHover: '#6E7E85',
+      dt_veryDarkGrayishBlue: '#4F5D75',
+      dt_veryDarkGrayishBlueHover: '#4F5D75',
+    },
+    screens: {
+      tablet: '550px',
+    },
+    boxShadow: {
+      list: '0px 35px 50px -15px rgba(194, 195, 214, 0.50)',
     },
   },
   plugins: [],
-};
-export default config;
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
+}
+export default config
