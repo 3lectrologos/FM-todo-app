@@ -1,6 +1,11 @@
 import { twMerge } from 'tailwind-merge'
+import { useEffect } from 'react'
 
 export default function NewTodo({ className }: { className?: string }) {
+  useEffect(() => {
+    console.log('Rendering')
+  })
+
   return (
     <div className={twMerge(`relative w-full`, className)}>
       <div

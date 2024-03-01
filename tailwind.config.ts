@@ -42,5 +42,6 @@ const config: Config = {
   future: {
     hoverOnlyWhenSupported: true,
   },
+  darkMode: 'selector',
 }
 export default config

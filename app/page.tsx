@@ -1,3 +1,5 @@
+'use client'
+
 import Title from '@/app/Title'
 import NewTodo from '@/app/NewTodo'
 

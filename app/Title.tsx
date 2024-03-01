@@ -1,4 +1,5 @@
 import { twMerge } from 'tailwind-merge'
+import ThemeToggle from '@/app/ThemeToggle'
 
 export default function Title({ className }: { className?: string }) {
   return (
@@ -13,7 +14,7 @@ export default function Title({ className }: { className?: string }) {
       >
         TODO
       </span>
-      <div>TB</div>
+      <ThemeToggle />
     </div>
   )
 }
