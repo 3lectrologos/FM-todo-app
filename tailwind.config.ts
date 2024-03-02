@@ -35,7 +35,8 @@ const config: Config = {
       tablet: '550px',
     },
     boxShadow: {
-      list: '0px 35px 50px -15px rgba(194, 195, 214, 0.50)',
+      lt_list: '0px 35px 50px -15px rgba(194, 195, 214, 0.50)',
+      dt_list: '0px 35px 50px -15px rgba(0, 0, 0, 0.50)',
     },
   },
   plugins: [],

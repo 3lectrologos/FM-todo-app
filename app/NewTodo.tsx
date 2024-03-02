@@ -19,7 +19,8 @@ export default function NewTodo({ className }: { className?: string }) {
         className={twMerge(
           `w-full h-12 tablet:h-16 flex-grow pl-[52px] tablet:pl-[72px] pr-5 tablet:pr-6`,
           `bg-white dark:bg-dt_list_bg rounded-[5px]`,
-          `text-lt_list_text dark:text-dt_list_text text-[12px] tracking-[-0.167px] tablet:text-[18px] tablet:tracking-[-0.25px]`
+          `text-lt_list_text dark:text-dt_list_text text-[12px] tracking-[-0.167px] tablet:text-[18px] tablet:tracking-[-0.25px]`,
+          `shadow-lt_list dark:shadow-dt_list`
         )}
         type="text"
         placeholder="Create a new todo..."

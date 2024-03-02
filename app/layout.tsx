@@ -27,11 +27,7 @@ export default function RootLayout({
               `bg-top bg-no-repeat`
             )}
           >
-            <div
-              className={`w-full py-12 px-6 tablet:px-0 tablet:py-[70px] tablet:w-[540px]`}
-            >
-              {children}
-            </div>
+            {children}
           </div>
         </ThemeProviderWrapper>
       </body>
