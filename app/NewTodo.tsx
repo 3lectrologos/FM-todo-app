@@ -28,10 +28,12 @@ export default function NewTodo({
       />
       <input
         className={twMerge(
-          `w-full h-12 tablet:h-16 flex-grow pl-[52px] tablet:pl-[72px] pr-5 tablet:pr-6`,
+          `w-full h-12 tablet:h-16 flex-grow pl-[52px] tablet:pl-[72px] pr-16 tablet:pr-20`,
           `bg-white dark:bg-dt_list_bg rounded-[5px]`,
-          `text-lt_list_text dark:text-dt_list_text text-[12px] tracking-[-0.167px] tablet:text-[18px] tablet:tracking-[-0.25px]`,
-          `shadow-lt_list dark:shadow-dt_list`
+          `text-lt_list_text dark:text-dt_list_text textStyle-list`,
+          `placeholder-lt_list_text_light dark:placeholder-dt_list_text_light`,
+          `shadow-lt_list dark:shadow-dt_list`,
+          `outline-none focus-visible:ring-2 focus-visible:ring-lt_list_text dark:focus-visible:ring-dt_list_text_light`
         )}
         type="text"
         placeholder="Create a new todo..."
@@ -45,14 +47,17 @@ export default function NewTodo({
       />
       <button
         className={twMerge(
-          `absolute top-1/2 -translate-y-1/2 right-5 tablet:right-6`,
+          `absolute top-1/2 -translate-y-1/2 right-4 tablet:right-5`,
           `flex items-center justify-center w-6 h-6 tablet:w-8 tablet:h-8 rounded-lg`,
           `bg-lt_darkGrayishBlue/5`,
-          `border border-lt_circle_gray dark:border-dt_circle_gray`
+          `border border-lt_list_text_light/50 dark:border-dt_list_text_light/50`,
+          `transition-colors hover:bg-lt_darkGrayishBlue/15 active:scale-90`
         )}
         onClick={() => handleAdd()}
       >
-        <RxPlus className={`w-6 h-6 text-lt_veryDarkGrayishBlue`} />
+        <RxPlus
+          className={`w-6 h-6 text-lt_list_text_light dark:border-dt_list_text_light`}
+        />
       </button>
     </div>
   )

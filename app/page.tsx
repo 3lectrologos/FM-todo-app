@@ -6,6 +6,8 @@ import { useState } from 'react'
 import { AnimatePresence, LayoutGroup } from 'framer-motion'
 import { motion, Reorder } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
+import { RxCross2 } from 'react-icons/rx'
+import { GiPartyPopper } from 'react-icons/gi'
 
 type ItemContent = { id: number; text: string }
 
@@ -36,7 +38,7 @@ export default function Home() {
       <LayoutGroup id="todo-list">
         <motion.div
           className={twMerge(
-            `bg-lt_circle_gray rounded-[5px]`,
+            `bg-lt_circle_gray dark:bg-dt_circle_gray rounded-[5px]`,
             `shadow-lt_list dark:shadow-dt_list`
           )}
           layout
@@ -44,9 +46,10 @@ export default function Home() {
         >
           {items.length === 0 && (
             <div
-              className={`flex flex-col h-24 bg-white/50 text-lt_list_text/50 items-center justify-center mb-px rounded-t-[5px]`}
+              className={`flex flex-row gap-x-3 h-24 text-lt_list_text_light dark:text-dt_list_text_light items-center justify-center mb-px rounded-t-[5px]`}
             >
-              Looks like you have nothing to do!
+              <span>Looks like you have nothing left to do!</span>
+              <GiPartyPopper className={`w-5 h-5`} />
             </div>
           )}
           {items.length > 0 && (
@@ -60,13 +63,17 @@ export default function Home() {
           <motion.div>
             <motion.div
               className={twMerge(
-                `w-full bg-white h-16 max-h-16 flex flex-row justify-center items-center px-6`,
+                `w-full bg-white dark:bg-dt_list_bg h-[50px] max-h-16 flex flex-row items-center px-6`,
                 `rounded-b-[5px]`
               )}
               layout
               transition={{ duration: layoutDuration }}
             >
-              <span className={`text-center`}>{`options`}</span>
+              <span
+                className={`text-center text-[14px] leading-[120%] tracking-[-0.2px] text-lt_list_text_very_light dark:text-dt_list_text_very_light`}
+              >
+                {items.length} items left
+              </span>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -130,13 +137,35 @@ function ItemBody({
   [_key: string]: any
 }) {
   return (
-    <motion.div
-      className={`w-full bg-white h-16 max-h-16 flex flex-row justify-between items-center px-6`}
-      {...props}
-    >
-      <span>{item.text}</span>
-      <button className={`w-6 h-6`} onClick={() => removeItem(item.id)}>
-        x
+    <motion.div className={`relative w-full`} {...props}>
+      <button
+        className={twMerge(
+          `absolute top-1/2 -translate-y-1/2 left-5 tablet:left-6`,
+          `w-5 h-5 tablet:w-6 tablet:h-6 rounded-full`,
+          `border border-lt_circle_gray dark:border-dt_circle_gray`
+        )}
+      />
+      <div
+        className={twMerge(
+          `w-full bg-white dark:bg-dt_list_bg flex items-center h-12 tablet:h-16 pl-[52px] tablet:pl-[72px] pr-16 tablet:pr-20`,
+          `textStyle-list text-lt_list_text dark:text-dt_list_text`
+        )}
+      >
+        <p className={`truncate`}>{item.text}</p>
+      </div>
+      <button
+        className={twMerge(
+          `absolute top-1/2 -translate-y-1/2 right-5 tablet:right-6`,
+          `flex items-center justify-center w-6 h-6 tablet:w-6 tablet:h-6 rounded-lg`,
+          `bg-lt_darkGrayishBlue/5`,
+          `border border-lt_list_text_light/50 dark:border-dt_list_text_light/50`,
+          `transition-colors hover:bg-highlight/25 active:scale-90`
+        )}
+        onClick={() => removeItem(item.id)}
+      >
+        <RxCross2
+          className={`w-4 h-4 text-lt_list_text_light dark:text-dt_list_text_light`}
+        />
       </button>
     </motion.div>
   )

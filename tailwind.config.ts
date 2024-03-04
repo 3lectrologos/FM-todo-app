@@ -13,7 +13,11 @@ const config: Config = {
       dt_circle_gray: '#393A4B',
 
       lt_list_text: '#494C6B',
+      lt_list_text_light: '#9495A5',
+      lt_list_text_very_light: '#9495A5',
       dt_list_text: '#C8CBE7',
+      dt_list_text_light: '#767992',
+      dt_list_text_very_light: '#5B5E7E',
 
       dt_list_bg: '#25273D',
 
@@ -30,6 +34,8 @@ const config: Config = {
       dt_darkGrayishBlueHover: '#6E7E85',
       dt_veryDarkGrayishBlue: '#4F5D75',
       dt_veryDarkGrayishBlueHover: '#4F5D75',
+
+      highlight: '#fca5a5',
     },
     screens: {
       tablet: '550px',
