@@ -1,10 +1,21 @@
 import { twMerge } from 'tailwind-merge'
-import { useEffect } from 'react'
+import { RxPlus } from 'react-icons/rx'
+import { useState } from 'react'
 
-export default function NewTodo({ className }: { className?: string }) {
-  useEffect(() => {
-    console.log('Rendering')
-  })
+export default function NewTodo({
+  className,
+  onAdd,
+}: {
+  className?: string
+  onAdd: (_text: string) => void
+}) {
+  const [text, setText] = useState('')
+
+  function handleAdd() {
+    if (!text) return
+    onAdd(text)
+    setText('')
+  }
 
   return (
     <div className={twMerge(`relative w-full`, className)}>
@@ -24,7 +35,25 @@ export default function NewTodo({ className }: { className?: string }) {
         )}
         type="text"
         placeholder="Create a new todo..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleAdd()
+          }
+        }}
       />
+      <button
+        className={twMerge(
+          `absolute top-1/2 -translate-y-1/2 right-5 tablet:right-6`,
+          `flex items-center justify-center w-6 h-6 tablet:w-8 tablet:h-8 rounded-lg`,
+          `bg-lt_darkGrayishBlue/5`,
+          `border border-lt_circle_gray dark:border-dt_circle_gray`
+        )}
+        onClick={() => handleAdd()}
+      >
+        <RxPlus className={`w-6 h-6 text-lt_veryDarkGrayishBlue`} />
+      </button>
     </div>
   )
 }
