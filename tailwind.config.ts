@@ -15,9 +15,11 @@ const config: Config = {
       lt_list_text: '#494C6B',
       lt_list_text_light: '#9495A5',
       lt_list_text_very_light: '#9495A5',
+      lt_list_text_extra_light: '#D1D2DA',
       dt_list_text: '#C8CBE7',
       dt_list_text_light: '#767992',
       dt_list_text_very_light: '#5B5E7E',
+      dt_list_text_extra_light: '#4D5067',
 
       dt_list_bg: '#25273D',
 

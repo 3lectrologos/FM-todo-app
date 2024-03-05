@@ -9,18 +9,30 @@ import { twMerge } from 'tailwind-merge'
 import { RxCross2 } from 'react-icons/rx'
 import { GiPartyPopper } from 'react-icons/gi'
 
-type ItemContent = { id: number; text: string }
+type ItemContent = { id: number; text: string; completed: boolean }
 
 export default function Home() {
   const [items, setItems] = useState<ItemContent[]>(
     Array.from({ length: 1 }, (_, i) => ({
       id: i,
       text: `Item ${i}`,
+      completed: false,
     }))
   )
 
   function addItem(text: string) {
-    setItems((items) => [...items, { id: items.length, text }])
+    setItems((items) => [
+      ...items,
+      { id: items.length, text, completed: false },
+    ])
+  }
+
+  function toggleCompleted(id: number) {
+    setItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, completed: !item.completed } : item
+      )
+    )
   }
 
   function removeItem(id: number) {
@@ -34,7 +46,7 @@ export default function Home() {
       className={`flex-grow flex flex-col w-full py-12 px-6 tablet:px-0 tablet:py-[70px] tablet:w-[540px]`}
     >
       <Title className={`mb-8 tablet:mb-10`} />
-      <NewTodo className={`mb-8 tablet:mb-10`} onAdd={addItem} />
+      <NewTodo className={`mb-4 tablet:mb-6`} onAdd={addItem} />
       <LayoutGroup id="todo-list">
         <motion.div
           className={twMerge(
@@ -56,6 +68,7 @@ export default function Home() {
             <ItemList
               items={items}
               setItems={setItems}
+              toggleCompleted={toggleCompleted}
               removeItem={removeItem}
               animationDuration={layoutDuration}
             />
@@ -85,11 +98,13 @@ export default function Home() {
 function ItemList({
   items,
   setItems,
+  toggleCompleted,
   removeItem,
   animationDuration,
 }: {
   items: ItemContent[]
   setItems: (items: ItemContent[]) => void
+  toggleCompleted: (id: number) => void
   removeItem: (id: number) => void
   animationDuration: number
 }) {
@@ -118,7 +133,12 @@ function ItemList({
               style={{ position: 'relative' }}
               layout="position"
             >
-              <ItemBody item={item} removeItem={removeItem} layout="position" />
+              <ItemBody
+                item={item}
+                removeItem={removeItem}
+                layout="position"
+                toggleCompleted={toggleCompleted}
+              />
             </Reorder.Item>
           </motion.div>
         ))}
@@ -130,10 +150,12 @@ function ItemList({
 function ItemBody({
   item,
   removeItem,
+  toggleCompleted,
   ...props
 }: {
   item: ItemContent
   removeItem: (id: number) => void
+  toggleCompleted: (id: number) => void
   [_key: string]: any
 }) {
   return (
@@ -142,16 +164,28 @@ function ItemBody({
         className={twMerge(
           `absolute top-1/2 -translate-y-1/2 left-5 tablet:left-6`,
           `w-5 h-5 tablet:w-6 tablet:h-6 rounded-full`,
-          `border border-lt_circle_gray dark:border-dt_circle_gray`
+          `border border-lt_circle_gray dark:border-dt_circle_gray`,
+          item.completed && `border-none`
         )}
-      />
+        onClick={() => toggleCompleted(item.id)}
+      >
+        {item.completed && <CompletedSVG />}
+      </button>
       <div
         className={twMerge(
           `w-full bg-white dark:bg-dt_list_bg flex items-center h-12 tablet:h-16 pl-[52px] tablet:pl-[72px] pr-16 tablet:pr-20`,
           `textStyle-list text-lt_list_text dark:text-dt_list_text`
         )}
       >
-        <p className={`truncate`}>{item.text}</p>
+        <p
+          className={twMerge(
+            `truncate transition-colors duration-500`,
+            item.completed &&
+              `text-lt_list_text_extra_light dark:text-dt_list_text_extra_light line-through`
+          )}
+        >
+          {item.text}
+        </p>
       </div>
       <button
         className={twMerge(
@@ -168,5 +202,55 @@ function ItemBody({
         />
       </button>
     </motion.div>
+  )
+}
+
+function CompletedSVG() {
+  const initDuration = 0.25
+
+  return (
+    <motion.svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      initial={{ opacity: 0, scale: 0.2 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        opacity: { duration: initDuration },
+        scale: { duration: initDuration, type: 'spring', bounce: 0.7 },
+      }}
+    >
+      <circle cx="12" cy="12" r="12" fill="url(#paint0_linear_0_267)" />
+      <motion.path
+        d="M8 12.3041L10.6959 15L16.6959 9"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{
+          pathLength: {
+            delay: initDuration * 0.75,
+            duration: 0.25,
+            ease: 'easeInOut',
+          },
+          opacity: { delay: initDuration * 0.75, duration: 0.01 },
+        }}
+      />
+      <defs>
+        <linearGradient
+          id="paint0_linear_0_267"
+          x1="-12"
+          y1="12"
+          x2="12"
+          y2="36"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#55DDFF" />
+          <stop offset="1" stopColor="#C058F3" />
+        </linearGradient>
+      </defs>
+    </motion.svg>
   )
 }
