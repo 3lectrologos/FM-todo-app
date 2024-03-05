@@ -12,19 +12,20 @@ import { GiPartyPopper } from 'react-icons/gi'
 type ItemContent = { id: number; text: string; completed: boolean }
 
 export default function Home() {
-  const [items, setItems] = useState<ItemContent[]>(
-    Array.from({ length: 1 }, (_, i) => ({
-      id: i,
-      text: `Item ${i}`,
-      completed: false,
-    }))
+  const [items, setItems] = useState<ItemContent[]>([])
+
+  const MAX_ID = 10000
+  const [idPool, setIdPool] = useState(
+    new Set(Array.from({ length: MAX_ID }, (_, i) => i))
   )
 
   function addItem(text: string) {
-    setItems((items) => [
-      ...items,
-      { id: items.length, text, completed: false },
-    ])
+    const minUniqueID = idPool.values().next().value
+    setIdPool((idPool) => {
+      idPool.delete(minUniqueID)
+      return idPool
+    })
+    setItems((items) => [...items, { id: minUniqueID, text, completed: false }])
   }
 
   function toggleCompleted(id: number) {
@@ -37,6 +38,10 @@ export default function Home() {
 
   function removeItem(id: number) {
     setItems((items) => items.filter((item) => item.id !== id))
+    setIdPool((idPool) => {
+      idPool.add(id)
+      return idPool
+    })
   }
 
   const layoutDuration = 0.1
@@ -177,6 +182,7 @@ function ItemBody({
           `textStyle-list text-lt_list_text dark:text-dt_list_text`
         )}
       >
+        {item.id} --
         <p
           className={twMerge(
             `truncate transition-colors duration-500`,
