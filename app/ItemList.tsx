@@ -42,7 +42,7 @@ export default function ItemList({
     <LayoutGroup id="todo-list">
       <motion.div
         className={twMerge(
-          `relative flex flex-col bg-lt_circle_gray dark:bg-dt_circle_gray rounded-[5px] pb-[50px]`,
+          `relative flex flex-col bg-lt_circle_gray/50 dark:bg-dt_circle_gray/85 rounded-[5px] pb-[50px]`,
           `shadow-lt_list dark:shadow-dt_list`,
           className
         )}
@@ -51,10 +51,14 @@ export default function ItemList({
       >
         {shownItems.length === 0 && (
           <div
-            className={`flex-grow flex flex-row gap-x-3 text-lt_list_text_light dark:text-dt_list_text_light items-center justify-center mb-px rounded-t-[5px]`}
+            className={`flex-grow flex flex-col gap-y-2 text-lt_list_text_light dark:text-dt_list_text_light items-center justify-center rounded-t-[5px] px-10 textStyle-normal`}
           >
-            <span>Looks like you have nothing left to do!</span>
-            <GiPartyPopper className={`w-5 h-5`} />
+            <span className={twMerge(`text-[12px] tablet:text-[14px]`)}>
+              Looks like you have nothing left to do!
+            </span>
+            <GiPartyPopper
+              className={`w-6 h-6 tablet:w-8 tablet:h-8 inline-block`}
+            />
           </div>
         )}
         {shownItems.length > 0 && (
@@ -111,18 +115,25 @@ function ListFooter({
   return (
     <motion.div
       className={twMerge(
-        `w-full bg-white dark:bg-dt_list_bg flex flex-row justify-between items-center px-6`,
+        `relative w-full bg-white dark:bg-dt_list_bg flex flex-row justify-between items-center px-6`,
         `rounded-b-[5px]`,
-        `text-[14px] leading-[120%] tracking-[-0.2px] text-lt_list_text_very_light dark:text-dt_list_text_very_light`,
+        `textStyle-normal text-lt_list_text_very_light dark:text-dt_list_text_very_light`,
         className
       )}
       layout
       transition={{ duration: animationDuration }}
     >
-      <span className={``}>
+      <span className={`text-[12px] tablet:text-[14px]`}>
         {activeLength} {activeLength === 1 ? 'item' : 'items'} left
       </span>
-      <div className={`flex flex-row gap-x-5 justify-center items-center`}>
+      <div
+        className={twMerge(
+          `flex flex-row gap-x-5 justify-center items-center`,
+          `absolute w-full h-12 bg-white dark:bg-dt_list_bg -bottom-4 translate-y-full left-1/2 -translate-x-1/2 rounded-[5px]`,
+          `shadow-lt_list dark:shadow-dt_list tablet:drop-shadow-none`,
+          `tablet:w-auto tablet:bg-none tablet:h-auto tablet:bottom-auto tablet:translate-y-0`
+        )}
+      >
         <TextButton
           className={`font-bold`}
           active={listMode === 'all'}
@@ -151,7 +162,12 @@ function ListFooter({
           Completed
         </TextButton>
       </div>
-      <TextButton onClick={clearCompleted}>Clear Completed</TextButton>
+      <TextButton
+        className={`text-[12px] tablet:text-[14px]`}
+        onClick={clearCompleted}
+      >
+        Clear Completed
+      </TextButton>
     </motion.div>
   )
 }
@@ -170,7 +186,7 @@ function TextButton({
   return (
     <button
       className={twMerge(
-        `text-[14px] leading-[120%] tracking-[-0.2px] text-lt_list_text_very_light dark:text-dt_list_text_very_light`,
+        `text-lt_list_text_very_light dark:text-dt_list_text_very_light`,
         !active &&
           `transition-colors hover:text-lt_list_text dark:hover:text-lt_circle_gray active:opacity-90 active:scale-95`,
         active && `text-active dark:text-active`,

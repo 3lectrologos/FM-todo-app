@@ -48,7 +48,7 @@ export default function NewItem({
       <button
         className={twMerge(
           `absolute top-1/2 -translate-y-1/2 right-4 tablet:right-5`,
-          `flex items-center justify-center w-6 h-6 tablet:w-8 tablet:h-8 rounded-lg`,
+          `flex items-center justify-center w-5 h-5 tablet:w-7 tablet:h-7 rounded-md tablet:rounded-lg`,
           `bg-lt_darkGrayishBlue/5`,
           `border border-lt_list_text_light/50 dark:border-dt_list_text_light/50`,
           `transition-colors hover:bg-lt_darkGrayishBlue/15 active:scale-90`
@@ -56,7 +56,7 @@ export default function NewItem({
         onClick={() => handleAdd()}
       >
         <RxPlus
-          className={`w-6 h-6 text-lt_list_text_light dark:border-dt_list_text_light`}
+          className={`w-4 h-4 tablet:w-6 tablet:h-6 text-lt_list_text_light dark:border-dt_list_text_light`}
         />
       </button>
     </div>

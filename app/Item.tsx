@@ -107,13 +107,15 @@ function ItemBody({
       <button
         className={twMerge(
           `absolute top-1/2 -translate-y-1/2 right-5 tablet:right-6`,
-          `flex items-center justify-center w-6 h-6 tablet:w-6 tablet:h-6 rounded-lg`,
-          `bg-lt_darkGrayishBlue/5`,
-          `border border-lt_list_text_light/50 dark:border-dt_list_text_light/50`,
-          `scale-0 opacity-0`,
-          !moving && `group-hover:scale-100 group-hover:opacity-100`,
-          `hover:bg-highlight/25 active:scale-90`,
-          `[transition:transform_0.15s_0.05s,opacity_0.15s_0.05s,background-color_0.15s_0s]`
+          `flex items-center justify-center w-4 h-4 tablet:w-6 tablet:h-6 rounded-lg`,
+          `tablet:bg-lt_darkGrayishBlue/5`,
+          `tablet:border tablet:border-lt_list_text_light/50 tablet:dark:border-dt_list_text_light/50`,
+          `tablet:scale-0 tablet:opacity-0`,
+          `tablet:group-hover:scale-100 tablet:group-hover:opacity-100`,
+          `tablet:hover:bg-highlight/15`,
+          `tablet:[transition:transform_0.15s_0.05s,opacity_0.15s_0.05s,background-color_0.15s_0s]`,
+          `active:scale-90`,
+          moving && `hidden`
         )}
         onClick={() => removeItem(item.id)}
       >
