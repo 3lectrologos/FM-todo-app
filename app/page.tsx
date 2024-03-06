@@ -2,12 +2,18 @@
 
 import Title from '@/app/Title'
 import NewTodo from '@/app/NewTodo'
-import { useMemo, useState } from 'react'
-import { AnimatePresence, LayoutGroup } from 'framer-motion'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  AnimatePresence,
+  LayoutGroup,
+  MotionValue,
+  useMotionValue,
+} from 'framer-motion'
 import { motion, Reorder } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 import { RxCross2 } from 'react-icons/rx'
 import { GiPartyPopper } from 'react-icons/gi'
+import { useRaisedShadow } from '@/app/useRaisedShadow'
 
 type ItemContent = { id: number; text: string; completed: boolean }
 
@@ -124,7 +130,8 @@ function ItemList({
     <motion.div
       className={twMerge(
         `bg-lt_circle_gray dark:bg-dt_circle_gray rounded-[5px]`,
-        `shadow-lt_list dark:shadow-dt_list`
+        `shadow-lt_list dark:shadow-dt_list`,
+        `cursor-grab`
       )}
       layout
       transition={{ duration: animationDuration }}
@@ -146,30 +153,14 @@ function ItemList({
         >
           <AnimatePresence>
             {shownItems.map((item, index) => (
-              <motion.div
-                className={twMerge(``, index === 0 ? `rounded-t-[5px]` : ``)}
+              <Item
+                item={item}
+                index={index}
+                removeItem={removeItem}
+                toggleCompleted={toggleCompleted}
+                animationDuration={animationDuration}
                 key={item.id}
-                exit={{ scaleX: 0.8, scaleY: 0, opacity: 0 }}
-                transition={{ duration: animationDuration }}
-              >
-                <Reorder.Item
-                  className={twMerge(
-                    `overflow-hidden cursor-grab tablet:h-16`,
-                    index === 0 ? `rounded-t-[5px]` : ``
-                  )}
-                  value={item}
-                  transition={{ duration: animationDuration }}
-                  style={{ position: 'relative' }}
-                  layout="position"
-                >
-                  <ItemBody
-                    item={item}
-                    removeItem={removeItem}
-                    layout="position"
-                    toggleCompleted={toggleCompleted}
-                  />
-                </Reorder.Item>
-              </motion.div>
+              />
             ))}
           </AnimatePresence>
         </Reorder.Group>
@@ -248,15 +239,74 @@ function TextButton({
   )
 }
 
+function Item({
+  item,
+  index,
+  className,
+  removeItem,
+  toggleCompleted,
+  animationDuration,
+}: {
+  item: ItemContent
+  index: number
+  className?: string
+  removeItem: (id: number) => void
+  toggleCompleted: (id: number) => void
+  animationDuration: number
+}) {
+  const y = useMotionValue(0)
+  const { boxShadow } = useRaisedShadow(y)
+  const [dragging, setDragging] = useState(false)
+
+  return (
+    <motion.div
+      className={twMerge(
+        `group`,
+        index === 0 ? `rounded-t-[5px]` : ``,
+        className
+      )}
+      exit={{ scaleX: 0.8, scaleY: 0, opacity: 0 }}
+      transition={{ duration: animationDuration }}
+    >
+      <Reorder.Item
+        className={twMerge(
+          `overflow-hidden cursor-grab tablet:h-16`,
+          index === 0 ? `rounded-t-[5px]` : ``
+        )}
+        value={item}
+        transition={{ duration: animationDuration }}
+        style={{ position: 'relative', y, boxShadow }}
+        layout="position"
+        onDragStart={() => {
+          setDragging(true)
+        }}
+        onDragEnd={() => {
+          setDragging(false)
+        }}
+      >
+        <ItemBody
+          item={item}
+          removeItem={removeItem}
+          layout="position"
+          toggleCompleted={toggleCompleted}
+          moving={dragging}
+        />
+      </Reorder.Item>
+    </motion.div>
+  )
+}
+
 function ItemBody({
   item,
   removeItem,
   toggleCompleted,
+  moving,
   ...props
 }: {
   item: ItemContent
   removeItem: (id: number) => void
   toggleCompleted: (id: number) => void
+  moving: boolean
   [_key: string]: any
 }) {
   return (
@@ -294,7 +344,10 @@ function ItemBody({
           `flex items-center justify-center w-6 h-6 tablet:w-6 tablet:h-6 rounded-lg`,
           `bg-lt_darkGrayishBlue/5`,
           `border border-lt_list_text_light/50 dark:border-dt_list_text_light/50`,
-          `transition-colors hover:bg-highlight/25 active:scale-90`
+          `scale-0 opacity-0`,
+          !moving && `group-hover:scale-100 group-hover:opacity-100`,
+          `hover:bg-highlight/25 active:scale-90`,
+          `[transition:transform_0.15s_0.05s,opacity_0.15s_0.05s,background-color_0.15s_0s]`
         )}
         onClick={() => removeItem(item.id)}
       >
