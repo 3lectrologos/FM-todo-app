@@ -5,3 +5,7 @@
 .textStyle-list {
   @apply text-[12px] tracking-[-0.167px] tablet:text-[18px] tablet:tracking-[-0.25px];
 }
+
+.textStyle-normal {
+  @apply text-[14px] leading-[120%] tracking-[-0.2px];
+}

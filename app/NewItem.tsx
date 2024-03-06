@@ -2,7 +2,7 @@ import { twMerge } from 'tailwind-merge'
 import { RxPlus } from 'react-icons/rx'
 import { useState } from 'react'
 
-export default function NewTodo({
+export default function NewItem({
   className,
   onAdd,
 }: {
