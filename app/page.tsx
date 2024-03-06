@@ -62,6 +62,10 @@ export default function Home() {
     }
   }
 
+  function clearCompleted() {
+    setItems((items) => items.filter((item) => !item.completed))
+  }
+
   const layoutDuration = 0.1
 
   return (
@@ -76,6 +80,7 @@ export default function Home() {
           toggleCompleted={toggleCompleted}
           removeItem={removeItem}
           reorderItems={reorderItems}
+          clearCompleted={clearCompleted}
           animationDuration={layoutDuration}
         />
       </LayoutGroup>
@@ -90,12 +95,14 @@ function ItemList({
   toggleCompleted,
   removeItem,
   reorderItems,
+  clearCompleted,
   animationDuration,
 }: {
   items: ItemContent[]
   toggleCompleted: (id: number) => void
   removeItem: (id: number) => void
   reorderItems: (orderedItems: ItemContent[], mode: ListMode) => void
+  clearCompleted: () => void
   animationDuration: number
 }) {
   const [listMode, setListMode] = useState<ListMode>('all')
@@ -207,7 +214,7 @@ function ItemList({
               Completed
             </TextButton>
           </div>
-          <TextButton onClick={() => {}}>Clear Completed</TextButton>
+          <TextButton onClick={clearCompleted}>Clear Completed</TextButton>
         </motion.div>
       </motion.div>
     </motion.div>
