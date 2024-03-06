@@ -38,6 +38,7 @@ const config: Config = {
       dt_veryDarkGrayishBlueHover: '#4F5D75',
 
       highlight: '#fca5a5',
+      active: '#3A7CFD',
     },
     screens: {
       tablet: '550px',

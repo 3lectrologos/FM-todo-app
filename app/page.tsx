@@ -2,7 +2,7 @@
 
 import Title from '@/app/Title'
 import NewTodo from '@/app/NewTodo'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { AnimatePresence, LayoutGroup } from 'framer-motion'
 import { motion, Reorder } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
@@ -44,6 +44,24 @@ export default function Home() {
     })
   }
 
+  function reorderItems(orderedItems: ItemContent[], mode: ListMode) {
+    if (mode === 'all') {
+      setItems(orderedItems)
+    } else if (mode === 'active') {
+      const orderedIterator = orderedItems.values()
+      const newItems = items.map((item) =>
+        item.completed ? item : orderedIterator.next().value
+      )
+      setItems(newItems)
+    } else if (mode === 'completed') {
+      const orderedIterator = orderedItems.values()
+      const newItems = items.map((item) =>
+        !item.completed ? item : orderedIterator.next().value
+      )
+      setItems(newItems)
+    }
+  }
+
   const layoutDuration = 0.1
 
   return (
@@ -53,102 +71,173 @@ export default function Home() {
       <Title className={`mb-8 tablet:mb-10`} />
       <NewTodo className={`mb-4 tablet:mb-6`} onAdd={addItem} />
       <LayoutGroup id="todo-list">
-        <motion.div
-          className={twMerge(
-            `bg-lt_circle_gray dark:bg-dt_circle_gray rounded-[5px]`,
-            `shadow-lt_list dark:shadow-dt_list`
-          )}
-          layout
-          transition={{ duration: layoutDuration }}
-        >
-          {items.length === 0 && (
-            <div
-              className={`flex flex-row gap-x-3 h-24 text-lt_list_text_light dark:text-dt_list_text_light items-center justify-center mb-px rounded-t-[5px]`}
-            >
-              <span>Looks like you have nothing left to do!</span>
-              <GiPartyPopper className={`w-5 h-5`} />
-            </div>
-          )}
-          {items.length > 0 && (
-            <ItemList
-              items={items}
-              setItems={setItems}
-              toggleCompleted={toggleCompleted}
-              removeItem={removeItem}
-              animationDuration={layoutDuration}
-            />
-          )}
-          <motion.div>
-            <motion.div
-              className={twMerge(
-                `w-full bg-white dark:bg-dt_list_bg h-[50px] max-h-16 flex flex-row items-center px-6`,
-                `rounded-b-[5px]`
-              )}
-              layout
-              transition={{ duration: layoutDuration }}
-            >
-              <span
-                className={`text-center text-[14px] leading-[120%] tracking-[-0.2px] text-lt_list_text_very_light dark:text-dt_list_text_very_light`}
-              >
-                {items.length} items left
-              </span>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+        <ItemList
+          items={items}
+          toggleCompleted={toggleCompleted}
+          removeItem={removeItem}
+          reorderItems={reorderItems}
+          animationDuration={layoutDuration}
+        />
       </LayoutGroup>
     </main>
   )
 }
 
+type ListMode = 'all' | 'active' | 'completed'
+
 function ItemList({
   items,
-  setItems,
   toggleCompleted,
   removeItem,
+  reorderItems,
   animationDuration,
 }: {
   items: ItemContent[]
-  setItems: (items: ItemContent[]) => void
   toggleCompleted: (id: number) => void
   removeItem: (id: number) => void
+  reorderItems: (orderedItems: ItemContent[], mode: ListMode) => void
   animationDuration: number
 }) {
+  const [listMode, setListMode] = useState<ListMode>('all')
+  const activeItems = useMemo(
+    () => items.filter((item) => !item.completed),
+    [items]
+  )
+  const completedItems = useMemo(
+    () => items.filter((item) => item.completed),
+    [items]
+  )
+  const shownItems = useMemo(() => {
+    if (listMode === 'active') return activeItems
+    if (listMode === 'completed') return completedItems
+    return items
+  }, [listMode, items, activeItems, completedItems])
+
   return (
-    <Reorder.Group
-      className={`flex flex-col gap-y-px mb-px`}
-      axis="y"
-      values={items}
-      onReorder={setItems}
+    <motion.div
+      className={twMerge(
+        `bg-lt_circle_gray dark:bg-dt_circle_gray rounded-[5px]`,
+        `shadow-lt_list dark:shadow-dt_list`
+      )}
+      layout
+      transition={{ duration: animationDuration }}
     >
-      <AnimatePresence>
-        {items.map((item, index) => (
-          <motion.div
-            className={twMerge(``, index === 0 ? `rounded-t-[5px]` : ``)}
-            key={item.id}
-            exit={{ scaleX: 0.8, scaleY: 0, opacity: 0 }}
-            transition={{ duration: animationDuration }}
-          >
-            <Reorder.Item
-              className={twMerge(
-                `overflow-hidden cursor-grab tablet:h-16`,
-                index === 0 ? `rounded-t-[5px]` : ``
-              )}
-              value={item}
-              transition={{ duration: animationDuration }}
-              style={{ position: 'relative' }}
-              layout="position"
+      {shownItems.length === 0 && (
+        <div
+          className={`flex flex-row gap-x-3 h-24 text-lt_list_text_light dark:text-dt_list_text_light items-center justify-center mb-px rounded-t-[5px]`}
+        >
+          <span>Looks like you have nothing left to do!</span>
+          <GiPartyPopper className={`w-5 h-5`} />
+        </div>
+      )}
+      {shownItems.length > 0 && (
+        <Reorder.Group
+          className={`flex flex-col gap-y-px mb-px`}
+          axis="y"
+          values={shownItems}
+          onReorder={(orderedItems) => reorderItems(orderedItems, listMode)}
+        >
+          <AnimatePresence>
+            {shownItems.map((item, index) => (
+              <motion.div
+                className={twMerge(``, index === 0 ? `rounded-t-[5px]` : ``)}
+                key={item.id}
+                exit={{ scaleX: 0.8, scaleY: 0, opacity: 0 }}
+                transition={{ duration: animationDuration }}
+              >
+                <Reorder.Item
+                  className={twMerge(
+                    `overflow-hidden cursor-grab tablet:h-16`,
+                    index === 0 ? `rounded-t-[5px]` : ``
+                  )}
+                  value={item}
+                  transition={{ duration: animationDuration }}
+                  style={{ position: 'relative' }}
+                  layout="position"
+                >
+                  <ItemBody
+                    item={item}
+                    removeItem={removeItem}
+                    layout="position"
+                    toggleCompleted={toggleCompleted}
+                  />
+                </Reorder.Item>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </Reorder.Group>
+      )}
+      <motion.div>
+        <motion.div
+          className={twMerge(
+            `w-full bg-white dark:bg-dt_list_bg h-[50px] max-h-16 flex flex-row justify-between items-center px-6`,
+            `rounded-b-[5px]`,
+            `text-[14px] leading-[120%] tracking-[-0.2px] text-lt_list_text_very_light dark:text-dt_list_text_very_light`
+          )}
+          layout
+          transition={{ duration: animationDuration }}
+        >
+          <span className={``}>{shownItems.length} items left</span>
+          <div className={`flex flex-row gap-x-5 justify-center items-center`}>
+            <TextButton
+              className={`font-bold`}
+              active={listMode === 'all'}
+              onClick={() => {
+                setListMode('all')
+              }}
             >
-              <ItemBody
-                item={item}
-                removeItem={removeItem}
-                layout="position"
-                toggleCompleted={toggleCompleted}
-              />
-            </Reorder.Item>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </Reorder.Group>
+              All
+            </TextButton>
+            <TextButton
+              className={`font-bold`}
+              active={listMode === 'active'}
+              onClick={() => {
+                setListMode('active')
+              }}
+            >
+              Active
+            </TextButton>
+            <TextButton
+              className={`font-bold`}
+              active={listMode === 'completed'}
+              onClick={() => {
+                setListMode('completed')
+              }}
+            >
+              Completed
+            </TextButton>
+          </div>
+          <TextButton onClick={() => {}}>Clear Completed</TextButton>
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function TextButton({
+  className = '',
+  active = false,
+  onClick,
+  children,
+}: {
+  className?: string
+  active?: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      className={twMerge(
+        `text-[14px] leading-[120%] tracking-[-0.2px] text-lt_list_text_very_light dark:text-dt_list_text_very_light`,
+        !active &&
+          `transition-colors hover:text-lt_list_text dark:hover:text-lt_circle_gray active:opacity-90 active:scale-95`,
+        active && `text-active dark:text-active`,
+        className
+      )}
+      onClick={onClick}
+    >
+      {children}
+    </button>
   )
 }
 
@@ -182,7 +271,6 @@ function ItemBody({
           `textStyle-list text-lt_list_text dark:text-dt_list_text`
         )}
       >
-        {item.id} --
         <p
           className={twMerge(
             `truncate transition-colors duration-500`,
