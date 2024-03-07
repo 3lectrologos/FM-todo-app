@@ -21,12 +21,17 @@ export default function RootLayout({
         <ThemeProviderWrapper>
           <div
             className={twMerge(
-              `flex flex-col items-center min-h-dvh bg-lt_veryLightGray dark:bg-dt_veryDarkDesaturatedBlue`,
-              `bg-[url('/images/bg-mobile-light.jpg')] tablet:bg-[url('/images/bg-desktop-light.jpg')]`,
-              `dark:bg-[url('/images/bg-mobile-dark.jpg')] tablet:dark:bg-[url('/images/bg-desktop-dark.jpg')]`,
-              `bg-top bg-no-repeat`
+              `flex flex-col items-center min-h-dvh bg-lt_veryLightGray dark:bg-dt_veryDarkDesaturatedBlue`
             )}
           >
+            <div
+              className={twMerge(
+                `absolute w-full h-[200px] tablet:h-[300px]`,
+                `bg-[url('/images/bg-mobile-light.jpg')] tablet:bg-[url('/images/bg-desktop-light.jpg')]`,
+                `dark:bg-[url('/images/bg-mobile-dark.jpg')] tablet:dark:bg-[url('/images/bg-desktop-dark.jpg')]`,
+                `bg-top bg-cover bg-no-repeat`
+              )}
+            ></div>
             {children}
           </div>
         </ThemeProviderWrapper>

@@ -43,7 +43,7 @@ const config: Config = {
       active: '#3A7CFD',
     },
     screens: {
-      tablet: '550px',
+      tablet: '600px',
     },
     boxShadow: {
       lt_list: '0px 35px 50px -15px rgba(194, 195, 214, 0.50)',
