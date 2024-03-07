@@ -12,6 +12,8 @@ const config: Config = {
       lt_circle_gray: '#E3E4F1',
       dt_circle_gray: '#393A4B',
 
+      dt_pattern_bg: '#171823',
+
       lt_list_text: '#494C6B',
       lt_list_text_light: '#9495A5',
       lt_list_text_very_light: '#9495A5',

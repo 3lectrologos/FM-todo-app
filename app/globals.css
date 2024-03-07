@@ -2,10 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --pattern-size: 50px;
+  --dt-bg: #393a4b;
+  --dt-fg: #767992;
+  --_g-dt:
+      var(--dt-fg) 0%  5% ,var(--dt-bg) 6%  15%,var(--dt-fg) 16% 25%,var(--dt-bg) 26% 35%,var(--dt-fg) 36% 45%,
+      var(--dt-bg) 46% 55%,var(--dt-fg) 56% 65%,var(--dt-bg) 66% 75%,var(--dt-fg) 76% 85%,var(--dt-bg) 86% 95%,
+      #0000 96%;
+  --lt-bg: #ffffff;
+  --lt-fg: #9495A5;
+  --_g-lt:
+      var(--lt-fg) 0%  5% ,var(--lt-bg) 6%  15%,var(--lt-fg) 16% 25%,var(--lt-bg) 26% 35%,var(--lt-fg) 36% 45%,
+      var(--lt-bg) 46% 55%,var(--lt-fg) 56% 65%,var(--lt-bg) 66% 75%,var(--lt-fg) 76% 85%,var(--lt-bg) 86% 95%,
+      #0000 96%;
+}
+
 .textStyle-list {
   @apply text-[12px] tracking-[-0.167px] tablet:text-[18px] tablet:tracking-[-0.25px];
 }
 
 .textStyle-normal {
   @apply text-[14px] leading-[120%] tracking-[-0.2px];
+}
+
+.dark .diag-pattern {
+  background:
+      radial-gradient(50% 50% at 100% 0, var(--_g-dt)),
+      radial-gradient(50% 50% at 0 100%, var(--_g-dt)),
+      radial-gradient(50% 50% at center, var(--_g-dt)),
+      radial-gradient(50% 50% at center, var(--_g-dt)) calc(var(--pattern-size)/2) calc(var(--pattern-size)/2)
+      var(--dt-fg);
+  background-size: var(--pattern-size) var(--pattern-size);
+}
+
+.light .diag-pattern {
+  background:
+      radial-gradient(50% 50% at 100% 0, var(--_g-lt)),
+      radial-gradient(50% 50% at 0 100%, var(--_g-lt)),
+      radial-gradient(50% 50% at center, var(--_g-lt)),
+      radial-gradient(50% 50% at center, var(--_g-lt)) calc(var(--pattern-size)/2) calc(var(--pattern-size)/2)
+      var(--lt-fg);
+  background-size: var(--pattern-size) var(--pattern-size);
 }

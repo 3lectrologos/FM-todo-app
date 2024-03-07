@@ -42,18 +42,33 @@ export default function ItemList({
     <LayoutGroup id="todo-list">
       <motion.div
         className={twMerge(
-          `relative flex flex-col bg-lt_circle_gray/50 dark:bg-dt_circle_gray/85 rounded-[5px] pb-[50px]`,
+          `relative flex flex-col rounded-[5px] pb-[50px]`,
+          `border border-lt_list_text_light/5 dark:border-dt_list_text_light/5`,
           `shadow-lt_list dark:shadow-dt_list`,
+          `bg-lt_veryLightGrayishBlue dark:bg-dt_pattern_bg`,
           className
         )}
         layout
         transition={{ duration: animationDuration }}
       >
+        <div
+          className={`absolute w-full h-full rounded-[5px] diag-pattern opacity-15`}
+        >
+          <div
+            className={twMerge(
+              `w-full h-full rounded-[5px] bg-gradient-to-b`,
+              `from-lt_veryLightGrayishBlue from-60% to-100%`,
+              `dark:from-dt_circle_gray dark:from-60% dark:to-100%`
+            )}
+          ></div>
+        </div>
         {shownItems.length === 0 && (
           <div
-            className={`flex-grow flex flex-col gap-y-2 text-lt_list_text_light dark:text-dt_list_text_light items-center justify-center rounded-t-[5px] px-10 textStyle-normal`}
+            className={`flex-grow flex flex-col gap-y-2 text-lt_list_text_light dark:text-dt_list_text_light items-center justify-center rounded-t-[5px] px-8 py-6 textStyle-normal`}
           >
-            <span className={twMerge(`text-[12px] tablet:text-[14px]`)}>
+            <span
+              className={twMerge(`text-center text-[12px] tablet:text-[14px]`)}
+            >
               Looks like you have nothing left to do!
             </span>
             <GiPartyPopper

@@ -32,6 +32,7 @@ export default function NewItem({
           `bg-white dark:bg-dt_list_bg rounded-[5px]`,
           `text-lt_list_text dark:text-dt_list_text textStyle-list`,
           `placeholder-lt_list_text_light dark:placeholder-dt_list_text_light`,
+          `border border-lt_list_text_light/5 dark:border-dt_list_text_light/5`,
           `shadow-lt_list dark:shadow-dt_list`,
           `outline-none focus-visible:ring-2 focus-visible:ring-lt_list_text dark:focus-visible:ring-dt_list_text_light`
         )}
@@ -56,7 +57,7 @@ export default function NewItem({
         onClick={() => handleAdd()}
       >
         <RxPlus
-          className={`w-4 h-4 tablet:w-6 tablet:h-6 text-lt_list_text_light dark:border-dt_list_text_light`}
+          className={`w-4 h-4 tablet:w-5 tablet:h-5 text-lt_list_text_light dark:border-dt_list_text_light`}
         />
       </button>
     </div>
