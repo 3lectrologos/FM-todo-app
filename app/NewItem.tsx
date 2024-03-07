@@ -52,7 +52,7 @@ export default function NewItem({
           `flex items-center justify-center w-5 h-5 tablet:w-7 tablet:h-7 rounded-md tablet:rounded-lg`,
           `bg-lt_darkGrayishBlue/5`,
           `border border-lt_list_text_light/50 dark:border-dt_list_text_light/50`,
-          `transition-colors hover:bg-lt_darkGrayishBlue/15 active:scale-90`
+          `transition-colors hover:bg-active/10 dark:hover:bg-active/20 active:scale-90`
         )}
         onClick={() => handleAdd()}
       >

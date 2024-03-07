@@ -52,7 +52,7 @@ export default function ItemList({
         transition={{ duration: animationDuration }}
       >
         <div
-          className={`absolute w-full h-full rounded-[5px] diag-pattern opacity-15`}
+          className={`absolute w-full h-full rounded-[5px] diag-pattern opacity-20`}
         >
           <div
             className={twMerge(
