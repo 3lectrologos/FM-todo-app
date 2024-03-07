@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 export default function ThemeToggle({ className }: { className?: string }) {
   const { resolvedTheme, setTheme } = useTheme()
@@ -17,17 +18,17 @@ export default function ThemeToggle({ className }: { className?: string }) {
 
   return (
     <button
-      className={`w-5 h-5 tablet:w-[26px] tablet:h-[26px]`}
+      className={twMerge(`w-5 h-5 tablet:w-[26px] tablet:h-[26px]`, className)}
       onClick={toggleTheme}
       aria-label="Toggle color scheme"
     >
-      {resolvedTheme === 'light' && <Moon className={``} />}
-      {resolvedTheme === 'dark' && <Sun className={``} />}
+      {resolvedTheme === 'light' && <Moon />}
+      {resolvedTheme === 'dark' && <Sun />}
     </button>
   )
 }
 
-function Moon({ className }: { className?: string }) {
+function Moon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
       <path
@@ -39,7 +40,7 @@ function Moon({ className }: { className?: string }) {
   )
 }
 
-function Sun({ className }: { className?: string }) {
+function Sun() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
       <path
