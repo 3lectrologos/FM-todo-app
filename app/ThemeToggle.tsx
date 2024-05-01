@@ -14,7 +14,9 @@ export default function ThemeToggle({ className }: { className?: string }) {
     setTheme(resolvedTheme === 'light' ? 'dark' : 'light')
   }
 
-  if (!mounted) return null
+  if (!mounted) {
+    return <div className={`w-[26px] h-[26px] invisible`} />
+  }
 
   return (
     <button
