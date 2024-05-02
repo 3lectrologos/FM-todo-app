@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Josefin_Sans } from 'next/font/google'
 import './globals.css'
 import { twMerge } from 'tailwind-merge'
-import ThemeProviderWrapper from '@/app/ThemeProviderWrapper'
+import ThemeProviderWrapper from '@/app/(theme)/ThemeProviderWrapper'
 
 const josefinSans = Josefin_Sans({ subsets: ['latin'] })
 

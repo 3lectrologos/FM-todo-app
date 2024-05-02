@@ -13,11 +13,11 @@ export default function Item({
   toggleCompleted,
   animationDuration,
 }: {
-  item: ItemContent
+  item: TodoItem
   index: number
   className?: string
-  removeItem: (id: number) => void
-  toggleCompleted: (id: number) => void
+  removeItem: (id: string) => void
+  toggleCompleted: (id: string) => void
   animationDuration: number
 }) {
   const y = useMotionValue(0)
@@ -69,9 +69,9 @@ function ItemBody({
   moving,
   ...props
 }: {
-  item: ItemContent
-  removeItem: (id: number) => void
-  toggleCompleted: (id: number) => void
+  item: TodoItem
+  removeItem: (id: string) => void
+  toggleCompleted: (id: string) => void
   moving: boolean
   [_key: string]: any
 }) {

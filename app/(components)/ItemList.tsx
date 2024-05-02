@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { LayoutGroup, motion, Reorder, AnimatePresence } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 import { GiPartyPopper } from 'react-icons/gi'
-import Item from '@/app/Item'
+import Item from '@/app/(components)/Item'
 
 type ListMode = 'all' | 'active' | 'completed'
 
@@ -16,10 +16,10 @@ export default function ItemList({
   animationDuration = 0.1,
 }: {
   className?: string
-  items: ItemContent[]
-  toggleCompleted: (id: number) => void
-  removeItem: (id: number) => void
-  setItems: (items: ItemContent[]) => void
+  items: TodoItem[]
+  toggleCompleted: (id: string) => void
+  removeItem: (id: string) => void
+  setItems: (items: TodoItem[]) => void
   clearCompleted: () => void
   animationDuration?: number
 }) {
@@ -215,10 +215,10 @@ function TextButton({
 }
 
 function reorderItems(
-  items: ItemContent[],
-  orderedItems: ItemContent[],
+  items: TodoItem[],
+  orderedItems: TodoItem[],
   mode: ListMode
-): ItemContent[] {
+): TodoItem[] {
   if (mode === 'all') {
     return orderedItems
   } else if (mode === 'active') {

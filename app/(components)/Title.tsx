@@ -1,5 +1,5 @@
 import { twJoin, twMerge } from 'tailwind-merge'
-import ThemeToggle from '@/app/ThemeToggle'
+import ThemeToggle from '@/app/(theme)/ThemeToggle'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { SignInButton, SignOutButton } from '@/components/buttons'

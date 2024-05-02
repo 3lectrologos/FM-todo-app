@@ -1,1 +1,6 @@
-type ItemContent = { id: number; text: string; completed: boolean }
+type TodoItem = {
+  id: string
+  order: number
+  text: string
+  completed: boolean
+}

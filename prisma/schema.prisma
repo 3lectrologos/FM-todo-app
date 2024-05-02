@@ -25,9 +25,30 @@ model User {
   sessions      Session[]
   following     User[]          @relation("UserFollows")
   followedBy    User[]          @relation("UserFollows")
+  list          TodoList?
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TodoList {
+  id        String   @id @default(cuid())
+  todos     Todo[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Todo {
+  id        String   @id @default(cuid())
+  text      String
+  order     Int
+  completed Boolean
+  list      TodoList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  listId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

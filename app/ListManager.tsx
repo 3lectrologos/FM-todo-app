@@ -1,28 +1,33 @@
 'use client'
 
-import NewItem from '@/app/NewItem'
+import NewItem from '@/app/(components)/NewItem'
 import { useState } from 'react'
-import ItemList from '@/app/ItemList'
+import ItemList from '@/app/(components)/ItemList'
 import { twMerge } from 'tailwind-merge'
+import { createId } from '@paralleldrive/cuid2'
+import { createItem } from '@/app/itemActions'
 
-export default function ListManager({ className }: { className?: string }) {
-  const [items, setItems] = useState<ItemContent[]>([])
+export default function ListManager({
+  className,
+  list,
+}: {
+  className?: string
+  list: TodoItem[]
+}) {
+  const [items, setItems] = useState<TodoItem[]>(list)
 
-  const MAX_ID = 10000
-  const [idPool, setIdPool] = useState(
-    new Set(Array.from({ length: MAX_ID }, (_, i) => i))
-  )
-
-  function addItem(text: string) {
-    const minUniqueID = idPool.values().next().value
-    setIdPool((idPool) => {
-      idPool.delete(minUniqueID)
-      return idPool
-    })
-    setItems((items) => [...items, { id: minUniqueID, text, completed: false }])
+  async function addItem(text: string) {
+    const item: TodoItem = {
+      id: createId(),
+      order: items.length,
+      text,
+      completed: false,
+    }
+    await createItem(item)
+    setItems((items) => [...items, item])
   }
 
-  function toggleCompleted(id: number) {
+  function toggleCompleted(id: string) {
     setItems((items) =>
       items.map((item) =>
         item.id === id ? { ...item, completed: !item.completed } : item
@@ -30,12 +35,8 @@ export default function ListManager({ className }: { className?: string }) {
     )
   }
 
-  function removeItem(id: number) {
+  function removeItem(id: string) {
     setItems((items) => items.filter((item) => item.id !== id))
-    setIdPool((idPool) => {
-      idPool.add(id)
-      return idPool
-    })
   }
 
   function clearCompleted() {
