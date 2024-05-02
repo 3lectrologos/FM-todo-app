@@ -5,7 +5,12 @@ import { useState } from 'react'
 import ItemList from '@/app/(components)/ItemList'
 import { twMerge } from 'tailwind-merge'
 import { createId } from '@paralleldrive/cuid2'
-import { createItem } from '@/app/itemActions'
+import {
+  createItem,
+  deleteCompletedItems,
+  deleteItem,
+  updateItem,
+} from '@/app/itemActions'
 
 export default function ListManager({
   className,
@@ -27,7 +32,12 @@ export default function ListManager({
     setItems((items) => [...items, item])
   }
 
-  function toggleCompleted(id: string) {
+  async function toggleCompleted(id: string) {
+    const item = items.find((item) => item.id === id)
+    if (!item) {
+      throw new Error(`Item with id ${id} not found`)
+    }
+    await updateItem({ ...item, completed: !item.completed })
     setItems((items) =>
       items.map((item) =>
         item.id === id ? { ...item, completed: !item.completed } : item
@@ -35,11 +45,13 @@ export default function ListManager({
     )
   }
 
-  function removeItem(id: string) {
+  async function removeItem(id: string) {
+    await deleteItem(id)
     setItems((items) => items.filter((item) => item.id !== id))
   }
 
-  function clearCompleted() {
+  async function clearCompleted() {
+    await deleteCompletedItems()
     setItems((items) => items.filter((item) => !item.completed))
   }
 

@@ -13,7 +13,7 @@ export async function createItem(item: TodoItem) {
 
   await prisma.todoList.upsert({
     where: {
-      userId: user.id || '',
+      userId: user.id,
     },
     update: {
       todos: {
@@ -26,7 +26,7 @@ export async function createItem(item: TodoItem) {
       },
     },
     create: {
-      userId: user.id || '',
+      userId: user.id!,
       todos: {
         create: {
           id: item.id,
@@ -35,6 +35,67 @@ export async function createItem(item: TodoItem) {
           order: item.order,
         },
       },
+    },
+  })
+
+  revalidatePath('/')
+}
+
+export async function deleteItem(id: string) {
+  const session = await auth()
+  if (!session || !session.user) {
+    return
+  }
+  // TODO: This is ignored now, because there is no row-level security for todo items.
+  const user = session.user
+
+  await prisma.todo.delete({
+    where: {
+      id,
+    },
+  })
+
+  revalidatePath('/')
+}
+
+export async function deleteCompletedItems() {
+  const session = await auth()
+  if (!session || !session.user) {
+    return
+  }
+  const user = session.user
+
+  const list = await prisma.todoList.findUnique({
+    where: {
+      userId: user.id,
+    },
+  })
+
+  await prisma.todo.deleteMany({
+    where: {
+      listId: list?.id,
+      completed: true,
+    },
+  })
+
+  revalidatePath('/')
+}
+
+export async function updateItem(item: TodoItem) {
+  const session = await auth()
+  if (!session || !session.user) {
+    return
+  }
+  // TODO: This is ignored now, because there is no row-level security for todo items.
+  const user = session.user
+
+  await prisma.todo.update({
+    where: {
+      id: item.id,
+    },
+    data: {
+      text: item.text,
+      completed: item.completed,
     },
   })
 
@@ -50,7 +111,7 @@ export async function getItems(): Promise<TodoItem[]> {
 
   const list = await prisma.todoList.findUnique({
     where: {
-      userId: user.id || '',
+      userId: user.id,
     },
     select: {
       todos: {
