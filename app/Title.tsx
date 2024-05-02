@@ -33,7 +33,7 @@ async function AuthMenu({ className }: { className?: string }) {
       <div
         className={twJoin(
           `text-sm flex flex-row items-center gap-x-3`,
-          `bg-lt_veryLightGray dark:bg-dt_list_bg pl-1.5 pr-2 py-1 rounded-l-[33px] rounded-r-lg`,
+          `bg-lt_veryLightGray dark:bg-dt_list_bg p-2.5 rounded-l-[33px] rounded-r-md`,
           className
         )}
       >
@@ -69,7 +69,7 @@ async function AuthMenu({ className }: { className?: string }) {
   }
   return (
     <div className={twMerge(``, className)}>
-      <SignInButton />
+      <SignInButton className={`px-4 py-3`} />
     </div>
   )
 }
