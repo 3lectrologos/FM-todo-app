@@ -1,6 +1,6 @@
 type TodoItem = {
   id: string
-  order: number
+  lexorank: string
   text: string
   completed: boolean
 }

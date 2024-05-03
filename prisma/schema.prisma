@@ -45,7 +45,7 @@ model TodoList {
 model Todo {
   id        String   @id @default(cuid())
   text      String
-  order     Int
+  lexorank  String
   completed Boolean
   list      TodoList @relation(fields: [listId], references: [id], onDelete: Cascade)
   listId    String

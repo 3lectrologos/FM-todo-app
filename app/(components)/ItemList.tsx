@@ -11,7 +11,6 @@ export default function ItemList({
   items,
   toggleCompleted,
   removeItem,
-  setItems,
   clearCompleted,
   animationDuration = 0.1,
 }: {
@@ -19,7 +18,6 @@ export default function ItemList({
   items: TodoItem[]
   toggleCompleted: (id: string) => void
   removeItem: (id: string) => void
-  setItems: (items: TodoItem[]) => void
   clearCompleted: () => void
   animationDuration?: number
 }) {
@@ -82,7 +80,7 @@ export default function ItemList({
             axis="y"
             values={shownItems}
             onReorder={(orderedItems) => {
-              setItems(reorderItems(items, orderedItems, listMode))
+              //setItems(reorderItems(items, orderedItems, listMode))
             }}
           >
             <AnimatePresence>

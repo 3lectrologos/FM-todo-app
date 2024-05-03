@@ -1,7 +1,6 @@
 'use client'
 
 import NewItem from '@/app/(components)/NewItem'
-import { useState } from 'react'
 import ItemList from '@/app/(components)/ItemList'
 import { twMerge } from 'tailwind-merge'
 import { createId } from '@paralleldrive/cuid2'
@@ -11,6 +10,7 @@ import {
   deleteItem,
   updateItem,
 } from '@/app/itemActions'
+import { LexoRank } from 'lexorank'
 
 export default function ListManager({
   className,
@@ -19,40 +19,35 @@ export default function ListManager({
   className?: string
   list: TodoItem[]
 }) {
-  const [items, setItems] = useState<TodoItem[]>(list)
-
   async function addItem(text: string) {
+    const newLexoRank =
+      list.length === 0
+        ? LexoRank.middle()
+        : LexoRank.parse(list[list.length - 1].lexorank).genNext()
     const item: TodoItem = {
       id: createId(),
-      order: items.length,
+      lexorank: newLexoRank.toString(),
       text,
       completed: false,
     }
+    console.log(item)
     await createItem(item)
-    setItems((items) => [...items, item])
   }
 
   async function toggleCompleted(id: string) {
-    const item = items.find((item) => item.id === id)
+    const item = list.find((item) => item.id === id)
     if (!item) {
       throw new Error(`Item with id ${id} not found`)
     }
     await updateItem({ ...item, completed: !item.completed })
-    setItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, completed: !item.completed } : item
-      )
-    )
   }
 
   async function removeItem(id: string) {
     await deleteItem(id)
-    setItems((items) => items.filter((item) => item.id !== id))
   }
 
   async function clearCompleted() {
     await deleteCompletedItems()
-    setItems((items) => items.filter((item) => !item.completed))
   }
 
   return (
@@ -60,10 +55,9 @@ export default function ListManager({
       <NewItem className={`mb-4 tablet:mb-6`} onAdd={addItem} />
       <ItemList
         className={`flex-grow`}
-        items={items}
+        items={list}
         toggleCompleted={toggleCompleted}
         removeItem={removeItem}
-        setItems={setItems}
         clearCompleted={clearCompleted}
         animationDuration={0.1}
       />
