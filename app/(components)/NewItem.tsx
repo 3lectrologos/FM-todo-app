@@ -1,5 +1,3 @@
-'use client'
-
 import { twMerge } from 'tailwind-merge'
 import { RxPlus } from 'react-icons/rx'
 import { useState } from 'react'

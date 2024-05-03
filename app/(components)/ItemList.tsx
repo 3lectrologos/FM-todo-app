@@ -1,6 +1,4 @@
-'use client'
-
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { LayoutGroup, motion, Reorder, AnimatePresence } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 import { GiPartyPopper } from 'react-icons/gi'
@@ -21,24 +19,36 @@ export default function ItemList({
   items: TodoItem[]
   toggleCompleted: (id: string) => void
   removeItem: (id: string) => void
-  reorderItem: (id: string, newIndex: number) => void
+  reorderItem: (id: string, oldIndex: number, newIndex: number) => void
   clearCompleted: () => void
   animationDuration?: number
 }) {
   const [listMode, setListMode] = useState<ListMode>('all')
+  const [orderedItems, setOrderedItems] = useState<TodoItem[]>(items)
   const activeItems = useMemo(
-    () => items.filter((item) => !item.completed),
-    [items]
+    () => orderedItems.filter((item) => !item.completed),
+    [orderedItems]
   )
   const completedItems = useMemo(
-    () => items.filter((item) => item.completed),
-    [items]
+    () => orderedItems.filter((item) => item.completed),
+    [orderedItems]
   )
   const shownItems = useMemo(() => {
     if (listMode === 'active') return activeItems
     if (listMode === 'completed') return completedItems
-    return items
-  }, [listMode, items, activeItems, completedItems])
+    return orderedItems
+  }, [listMode, orderedItems, activeItems, completedItems])
+
+  // FIXME: I do not fully understand why this is needed here. Without it, the list does not update when items change.
+  useEffect(() => {
+    setOrderedItems(items)
+  }, [items])
+
+  function handleReorderBackend() {
+    const indices = getReorderedIndex(items, orderedItems, listMode)
+    if (!indices) return
+    reorderItem(items[indices.oldIndex].id, indices.oldIndex, indices.newIndex)
+  }
 
   return (
     <LayoutGroup id="todo-list">
@@ -83,12 +93,16 @@ export default function ItemList({
             className={`flex flex-col gap-y-px mb-px`}
             axis="y"
             values={shownItems}
-            onReorder={(orderedItems) => {
-              //console.log(orderedItems)
-              //const indices = getReorderedIndex(items, orderedItems, listMode)
-              //if (!indices) return
-              //reorderItem(items[indices.oldIndex].id, indices.newIndex)
+            onReorder={(subItems) => {
+              const newItems = getReorderedItems(
+                orderedItems,
+                subItems,
+                listMode
+              )
+              setOrderedItems(newItems)
             }}
+            onMouseUp={handleReorderBackend}
+            onTouchEnd={handleReorderBackend}
           >
             <AnimatePresence>
               {shownItems.map((item, index) => (
@@ -225,7 +239,6 @@ function getReorderedIndex(
   mode: ListMode
 ) {
   const newItems = getReorderedItems(items, orderedItems, mode)
-  console.log('newItems =', newItems)
   return getMovedItemIndex(items, newItems)
 }
 
@@ -252,13 +265,37 @@ function getReorderedItems(
 
 // Get the old and new index of the first item that changed position
 function getMovedItemIndex(oldItems: TodoItem[], newItems: TodoItem[]) {
-  for (let i = 0; i < oldItems.length; i++) {
-    if (oldItems[i].id !== newItems[i].id) {
-      return {
-        oldIndex: i,
-        newIndex: newItems.findIndex((item) => item.id === oldItems[i].id),
-      }
+  // Find the first and last index where the items of oldItems and newItems differ
+  const firstIndex = oldItems.findIndex(
+    (item, index) => item !== newItems[index]
+  )
+  let lastIndex = -1
+  for (let i = oldItems.length - 1; i >= 0; i--) {
+    if (oldItems[i] !== newItems[i]) {
+      lastIndex = i
+      break
     }
   }
-  return undefined
+
+  if (firstIndex === -1 || lastIndex === -1) return undefined
+
+  // Figure out if it was the first or last item that changed position
+  console.log(firstIndex, lastIndex)
+  if (
+    newItems.findIndex((item) => item === oldItems[firstIndex]) === lastIndex
+  ) {
+    return {
+      oldIndex: firstIndex,
+      newIndex: lastIndex,
+    }
+  } else if (
+    newItems.findIndex((item) => item === oldItems[lastIndex]) === firstIndex
+  ) {
+    return {
+      oldIndex: lastIndex,
+      newIndex: firstIndex,
+    }
+  } else {
+    throw new Error('Invalid reorder. Did more than one item change position?')
+  }
 }

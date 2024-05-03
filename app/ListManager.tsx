@@ -23,12 +23,26 @@ type RemoveAction = {
   id: string
 }
 
+type ClearCompletedAction = {
+  type: 'clearCompleted'
+}
+
 type ToggleCompletedAction = {
   type: 'toggleCompleted'
   id: string
 }
 
-type ListAction = AddAction | RemoveAction | ToggleCompletedAction
+type SetAction = {
+  type: 'set'
+  list: TodoItem[]
+}
+
+type ListAction =
+  | AddAction
+  | RemoveAction
+  | ToggleCompletedAction
+  | SetAction
+  | ClearCompletedAction
 
 export default function ListManager({
   className,
@@ -48,6 +62,10 @@ export default function ListManager({
         return oldList.map((item) =>
           item.id === action.id ? { ...item, completed: !item.completed } : item
         )
+      } else if (action.type == 'clearCompleted') {
+        return oldList.filter((item) => !item.completed)
+      } else if (action.type === 'set') {
+        return action.list
       } else {
         return oldList
       }
@@ -86,26 +104,45 @@ export default function ListManager({
   }
 
   async function clearCompleted() {
+    startTransition(() => setOptimisticList({ type: 'clearCompleted' }))
     await deleteCompletedItems()
   }
 
-  async function reorderItem(id: string, newIndex: number) {
-    const loLexoRank =
-      newIndex === 0
-        ? LexoRank.parse(optimisticList[0].lexorank).genPrev()
-        : LexoRank.parse(optimisticList[newIndex - 1].lexorank)
-    const hiLexoRank =
-      newIndex === optimisticList.length - 1
-        ? LexoRank.parse(
-            optimisticList[optimisticList.length - 1].lexorank
-          ).genNext()
-        : LexoRank.parse(optimisticList[newIndex + 1].lexorank)
+  async function reorderItem(id: string, oldIndex: number, newIndex: number) {
+    let loLexoRank: LexoRank
+    let hiLexoRank: LexoRank
+
+    if (oldIndex < newIndex) {
+      loLexoRank = LexoRank.parse(optimisticList[newIndex].lexorank)
+      hiLexoRank =
+        newIndex === optimisticList.length - 1
+          ? LexoRank.parse(
+              optimisticList[optimisticList.length - 1].lexorank
+            ).genNext()
+          : LexoRank.parse(optimisticList[newIndex + 1].lexorank)
+    } else {
+      loLexoRank =
+        newIndex === 0
+          ? LexoRank.parse(optimisticList[0].lexorank).genPrev()
+          : LexoRank.parse(optimisticList[newIndex - 1].lexorank)
+      hiLexoRank = LexoRank.parse(optimisticList[newIndex].lexorank)
+    }
+
     const newLexoRank = loLexoRank.between(hiLexoRank)
     const item = optimisticList.find((item) => item.id === id)
     if (!item) {
       throw new Error(`Item with id ${id} not found`)
     }
-    console.log('lexo:', item.lexorank, '--', newLexoRank.toString())
+    startTransition(() => {
+      const newList = optimisticList.map((item) =>
+        item.id === id ? { ...item, lexorank: newLexoRank.toString() } : item
+      )
+      newList.sort((a, b) => (a.lexorank < b.lexorank ? -1 : 1))
+      setOptimisticList({
+        type: 'set',
+        list: newList,
+      })
+    })
     await updateItem({ ...item, lexorank: newLexoRank.toString() })
   }
 
