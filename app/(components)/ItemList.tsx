@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo, useState } from 'react'
 import { LayoutGroup, motion, Reorder, AnimatePresence } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
@@ -11,6 +13,7 @@ export default function ItemList({
   items,
   toggleCompleted,
   removeItem,
+  reorderItem,
   clearCompleted,
   animationDuration = 0.1,
 }: {
@@ -18,6 +21,7 @@ export default function ItemList({
   items: TodoItem[]
   toggleCompleted: (id: string) => void
   removeItem: (id: string) => void
+  reorderItem: (id: string, newIndex: number) => void
   clearCompleted: () => void
   animationDuration?: number
 }) {
@@ -80,7 +84,10 @@ export default function ItemList({
             axis="y"
             values={shownItems}
             onReorder={(orderedItems) => {
-              //setItems(reorderItems(items, orderedItems, listMode))
+              //console.log(orderedItems)
+              //const indices = getReorderedIndex(items, orderedItems, listMode)
+              //if (!indices) return
+              //reorderItem(items[indices.oldIndex].id, indices.newIndex)
             }}
           >
             <AnimatePresence>
@@ -212,11 +219,21 @@ function TextButton({
   )
 }
 
-function reorderItems(
+function getReorderedIndex(
   items: TodoItem[],
   orderedItems: TodoItem[],
   mode: ListMode
-): TodoItem[] {
+) {
+  const newItems = getReorderedItems(items, orderedItems, mode)
+  console.log('newItems =', newItems)
+  return getMovedItemIndex(items, newItems)
+}
+
+function getReorderedItems(
+  items: TodoItem[],
+  orderedItems: TodoItem[],
+  mode: ListMode
+) {
   if (mode === 'all') {
     return orderedItems
   } else if (mode === 'active') {
@@ -231,4 +248,17 @@ function reorderItems(
     )
   }
   return items
+}
+
+// Get the old and new index of the first item that changed position
+function getMovedItemIndex(oldItems: TodoItem[], newItems: TodoItem[]) {
+  for (let i = 0; i < oldItems.length; i++) {
+    if (oldItems[i].id !== newItems[i].id) {
+      return {
+        oldIndex: i,
+        newIndex: newItems.findIndex((item) => item.id === oldItems[i].id),
+      }
+    }
+  }
+  return undefined
 }

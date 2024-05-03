@@ -96,6 +96,7 @@ export async function updateItem(item: TodoItem) {
     data: {
       text: item.text,
       completed: item.completed,
+      lexorank: item.lexorank,
     },
   })
 

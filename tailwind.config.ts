@@ -39,7 +39,7 @@ const config: Config = {
       dt_veryDarkGrayishBlue: '#4F5D75',
       dt_veryDarkGrayishBlueHover: '#4F5D75',
 
-      highlight: '#fca5a5',
+      highlight: '#b91c1c',
       active: '#3A7CFD',
     },
     screens: {
