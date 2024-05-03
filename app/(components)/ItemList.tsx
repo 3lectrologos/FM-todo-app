@@ -39,10 +39,12 @@ export default function ItemList({
     return orderedItems
   }, [listMode, orderedItems, activeItems, completedItems])
 
-  // FIXME: I do not fully understand why this is needed here. Without it, the list does not update when items change.
-  useEffect(() => {
+  // NOTE: https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  const [prevItems, setPrevItems] = useState<TodoItem[]>(items)
+  if (items !== prevItems) {
+    setPrevItems(items)
     setOrderedItems(items)
-  }, [items])
+  }
 
   function handleReorderBackend() {
     const indices = getReorderedIndex(items, orderedItems, listMode)
