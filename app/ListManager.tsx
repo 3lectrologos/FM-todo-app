@@ -44,7 +44,7 @@ type ListAction =
   | SetAction
   | ClearCompletedAction
 
-export default function ListManager({
+export function ListManager({
   className,
   list,
 }: {
