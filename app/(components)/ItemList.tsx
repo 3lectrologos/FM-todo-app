@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { LayoutGroup, motion, Reorder, AnimatePresence } from 'framer-motion'
 import { twMerge } from 'tailwind-merge'
 import { GiPartyPopper } from 'react-icons/gi'

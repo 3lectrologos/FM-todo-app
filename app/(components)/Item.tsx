@@ -90,7 +90,7 @@ function ItemBody({
       </button>
       <div
         className={twMerge(
-          `w-full bg-white dark:bg-dt_list_bg flex items-center h-12 tablet:h-16 pl-[52px] tablet:pl-[72px] pr-16 tablet:pr-20`,
+          `w-full bg-white dark:bg-dt_list_bg flex items-center h-12 tablet:h-16 pl-[52px] tablet:pl-[72px] pr-14 tablet:pr-20`,
           `textStyle-list text-lt_list_text dark:text-dt_list_text`
         )}
       >
@@ -108,8 +108,6 @@ function ItemBody({
         className={twMerge(
           `absolute top-1/2 -translate-y-1/2 right-5 tablet:right-6`,
           `flex items-center justify-center w-4 h-4 tablet:w-6 tablet:h-6 rounded-lg`,
-          //`tablet:bg-lt_darkGrayishBlue/5`,
-          //`tablet:border tablet:border-lt_list_text_light/50 tablet:dark:border-dt_list_text_light/50`,
           `tablet:scale-0 tablet:opacity-0`,
           `tablet:group-hover:scale-100 tablet:group-hover:opacity-100`,
           `tablet:hover:bg-lt_circle_gray/50 tablet:dark:hover:bg-dt_circle_gray`,

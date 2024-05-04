@@ -24,9 +24,9 @@ export function SignOutButton({ className }: { className?: string }) {
         await signOut()
       }}
     >
-      <Button className={className} type="submit">
+      <button className={className} type="submit">
         Sign Out
-      </Button>
+      </button>
     </form>
   )
 }

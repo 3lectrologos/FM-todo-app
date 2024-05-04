@@ -28,7 +28,7 @@ export default function NewItem({
       />
       <input
         className={twMerge(
-          `w-full h-12 tablet:h-16 flex-grow pl-[52px] tablet:pl-[72px] pr-16 tablet:pr-20`,
+          `w-full h-12 tablet:h-16 flex-grow pl-[52px] tablet:pl-[72px] pr-14 tablet:pr-20`,
           `bg-white dark:bg-dt_list_bg rounded-[5px]`,
           `text-lt_list_text dark:text-dt_list_text textStyle-list`,
           `placeholder-lt_list_text_light dark:placeholder-dt_list_text_light`,
@@ -48,16 +48,15 @@ export default function NewItem({
       />
       <button
         className={twMerge(
-          `absolute top-1/2 -translate-y-1/2 right-4 tablet:right-5`,
-          `flex items-center justify-center w-5 h-5 tablet:w-7 tablet:h-7 rounded-md tablet:rounded-lg`,
-          `bg-lt_darkGrayishBlue/5`,
-          `border border-lt_list_text_light/50 dark:border-dt_list_text_light/50`,
-          `transition-colors hover:bg-active/10 dark:hover:bg-active/20 active:scale-90`
+          `absolute top-1/2 -translate-y-1/2 right-5 tablet:right-6`,
+          `flex items-center justify-center w-5 h-5 tablet:w-[26px] tablet:h-[26px]  rounded-md tablet:rounded-lg`,
+          `bg-lt_list_text_light/35`,
+          `transition-colors hover:bg-lt_list_text_light/60 active:scale-90`
         )}
         onClick={() => handleAdd()}
       >
         <RxPlus
-          className={`w-4 h-4 tablet:w-5 tablet:h-5 text-lt_list_text_light dark:border-dt_list_text_light`}
+          className={`w-4 h-4 tablet:w-5 tablet:h-5 text-white dark:text-dt_pattern_bg`}
         />
       </button>
     </div>
