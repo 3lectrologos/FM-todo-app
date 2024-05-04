@@ -47,7 +47,7 @@ export default function ItemList({
   }
 
   function handleReorderBackend() {
-    const indices = getReorderedIndex(items, orderedItems, listMode)
+    const indices = getMovedItemIndex(items, orderedItems)
     if (!indices) return
     reorderItem(items[indices.oldIndex].id, indices.oldIndex, indices.newIndex)
   }
@@ -235,45 +235,36 @@ function TextButton({
   )
 }
 
-function getReorderedIndex(
-  items: TodoItem[],
-  orderedItems: TodoItem[],
-  mode: ListMode
-) {
-  const newItems = getReorderedItems(items, orderedItems, mode)
-  return getMovedItemIndex(items, newItems)
-}
-
 function getReorderedItems(
   items: TodoItem[],
   orderedItems: TodoItem[],
   mode: ListMode
 ) {
   if (mode === 'all') {
-    return orderedItems
+    return [...orderedItems]
   } else if (mode === 'active') {
     const orderedIterator = orderedItems.values()
     return items.map((item) =>
-      item.completed ? item : orderedIterator.next().value
+      item.completed ? { ...item } : { ...orderedIterator.next().value }
     )
   } else if (mode === 'completed') {
     const orderedIterator = orderedItems.values()
     return items.map((item) =>
-      !item.completed ? item : orderedIterator.next().value
+      !item.completed ? { ...item } : { ...orderedIterator.next().value }
     )
   }
-  return items
+  throw new Error('Invalid list mode')
 }
 
 // Get the old and new index of the first item that changed position
 function getMovedItemIndex(oldItems: TodoItem[], newItems: TodoItem[]) {
   // Find the first and last index where the items of oldItems and newItems differ
   const firstIndex = oldItems.findIndex(
-    (item, index) => item !== newItems[index]
+    (item, index) => item.id !== newItems[index].id
   )
   let lastIndex = -1
   for (let i = oldItems.length - 1; i >= 0; i--) {
-    if (oldItems[i] !== newItems[i]) {
+    if (oldItems[i].id !== newItems[i].id) {
       lastIndex = i
       break
     }
@@ -282,16 +273,17 @@ function getMovedItemIndex(oldItems: TodoItem[], newItems: TodoItem[]) {
   if (firstIndex === -1 || lastIndex === -1) return undefined
 
   // Figure out if it was the first or last item that changed position
-  console.log(firstIndex, lastIndex)
   if (
-    newItems.findIndex((item) => item === oldItems[firstIndex]) === lastIndex
+    newItems.findIndex((item) => item.id === oldItems[firstIndex].id) ===
+    lastIndex
   ) {
     return {
       oldIndex: firstIndex,
       newIndex: lastIndex,
     }
   } else if (
-    newItems.findIndex((item) => item === oldItems[lastIndex]) === firstIndex
+    newItems.findIndex((item) => item.id === oldItems[lastIndex].id) ===
+    firstIndex
   ) {
     return {
       oldIndex: lastIndex,
