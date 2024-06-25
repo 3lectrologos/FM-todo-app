@@ -1,47 +1,118 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
+  @tailwind components;
+  @tailwind utilities;
 
-:root {
-  --pattern-size: 50px;
-  --dt-bg: #393a4b;
-  --dt-fg: #767992;
-  --_g-dt:
-      var(--dt-fg) 0%  5% ,var(--dt-bg) 6%  15%,var(--dt-fg) 16% 25%,var(--dt-bg) 26% 35%,var(--dt-fg) 36% 45%,
-      var(--dt-bg) 46% 55%,var(--dt-fg) 56% 65%,var(--dt-bg) 66% 75%,var(--dt-fg) 76% 85%,var(--dt-bg) 86% 95%,
-      #0000 96%;
-  --lt-bg: #ffffff;
-  --lt-fg: #c8c9d0;
-  --_g-lt:
-      var(--lt-fg) 0%  5% ,var(--lt-bg) 6%  15%,var(--lt-fg) 16% 25%,var(--lt-bg) 26% 35%,var(--lt-fg) 36% 45%,
-      var(--lt-bg) 46% 55%,var(--lt-fg) 56% 65%,var(--lt-bg) 66% 75%,var(--lt-fg) 76% 85%,var(--lt-bg) 86% 95%,
-      #0000 96%;
-}
+  @layer base {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 222.2 84% 4.9%;
 
-.textStyle-list {
-  @apply text-[12px] tracking-[-0.167px] tablet:text-[18px] tablet:tracking-[-0.25px];
-}
+      --card: 0 0% 100%;
+      --card-foreground: 222.2 84% 4.9%;
 
-.textStyle-normal {
-  @apply text-[14px] leading-[120%] tracking-[-0.2px];
-}
+      --popover: 0 0% 100%;
+      --popover-foreground: 222.2 84% 4.9%;
 
-.dark .diag-pattern {
-  background:
-      radial-gradient(50% 50% at 100% 0, var(--_g-dt)),
-      radial-gradient(50% 50% at 0 100%, var(--_g-dt)),
-      radial-gradient(50% 50% at center, var(--_g-dt)),
-      radial-gradient(50% 50% at center, var(--_g-dt)) calc(var(--pattern-size)/2) calc(var(--pattern-size)/2)
-      var(--dt-fg);
-  background-size: var(--pattern-size) var(--pattern-size);
-}
+      --primary: 222.2 47.4% 11.2%;
+      --primary-foreground: 210 40% 98%;
 
-.light .diag-pattern {
-  background:
-      radial-gradient(50% 50% at 100% 0, var(--_g-lt)),
-      radial-gradient(50% 50% at 0 100%, var(--_g-lt)),
-      radial-gradient(50% 50% at center, var(--_g-lt)),
-      radial-gradient(50% 50% at center, var(--_g-lt)) calc(var(--pattern-size)/2) calc(var(--pattern-size)/2)
-      var(--lt-fg);
-  background-size: var(--pattern-size) var(--pattern-size);
-}
+      --secondary: 210 40% 96.1%;
+      --secondary-foreground: 222.2 47.4% 11.2%;
+
+      --muted: 210 40% 96.1%;
+      --muted-foreground: 215.4 16.3% 46.9%;
+
+      --accent: 210 40% 96.1%;
+      --accent-foreground: 222.2 47.4% 11.2%;
+
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 40% 98%;
+
+      --border: 214.3 31.8% 91.4%;
+      --input: 214.3 31.8% 91.4%;
+      --ring: 222.2 84% 4.9%;
+
+      --radius: 0.5rem;
+
+      --pattern-size: 50px;
+      --dt-bg: #393a4b;
+      --dt-fg: #767992;
+      --_g-dt:
+          var(--dt-fg) 0%  5% ,var(--dt-bg) 6%  15%,var(--dt-fg) 16% 25%,var(--dt-bg) 26% 35%,var(--dt-fg) 36% 45%,
+          var(--dt-bg) 46% 55%,var(--dt-fg) 56% 65%,var(--dt-bg) 66% 75%,var(--dt-fg) 76% 85%,var(--dt-bg) 86% 95%,
+          #0000 96%;
+      --lt-bg: #ffffff;
+      --lt-fg: #c8c9d0;
+      --_g-lt:
+          var(--lt-fg) 0%  5% ,var(--lt-bg) 6%  15%,var(--lt-fg) 16% 25%,var(--lt-bg) 26% 35%,var(--lt-fg) 36% 45%,
+          var(--lt-bg) 46% 55%,var(--lt-fg) 56% 65%,var(--lt-bg) 66% 75%,var(--lt-fg) 76% 85%,var(--lt-bg) 86% 95%,
+          #0000 96%;
+    }
+
+    .dark {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+
+      --primary: 210 40% 98%;
+      --primary-foreground: 222.2 47.4% 11.2%;
+
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 212.7 26.8% 83.9%;
+    }
+  }
+
+  @layer base {
+    * {
+      @apply border-border;
+    }
+    body {
+      @apply bg-background text-foreground;
+    }
+
+    .textStyle-list {
+      @apply text-[12px] tracking-[-0.167px] tablet:text-[18px] tablet:tracking-[-0.25px];
+    }
+
+    .textStyle-normal {
+      @apply text-[14px] leading-[120%] tracking-[-0.2px];
+    }
+
+    .dark .diag-pattern {
+      background:
+          radial-gradient(50% 50% at 100% 0, var(--_g-dt)),
+          radial-gradient(50% 50% at 0 100%, var(--_g-dt)),
+          radial-gradient(50% 50% at center, var(--_g-dt)),
+          radial-gradient(50% 50% at center, var(--_g-dt)) calc(var(--pattern-size)/2) calc(var(--pattern-size)/2)
+          var(--dt-fg);
+      background-size: var(--pattern-size) var(--pattern-size);
+    }
+
+    .light .diag-pattern {
+      background:
+          radial-gradient(50% 50% at 100% 0, var(--_g-lt)),
+          radial-gradient(50% 50% at 0 100%, var(--_g-lt)),
+          radial-gradient(50% 50% at center, var(--_g-lt)),
+          radial-gradient(50% 50% at center, var(--_g-lt)) calc(var(--pattern-size)/2) calc(var(--pattern-size)/2)
+          var(--lt-fg);
+      background-size: var(--pattern-size) var(--pattern-size);
+    }
+  }
