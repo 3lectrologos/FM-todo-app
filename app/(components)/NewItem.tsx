@@ -54,6 +54,7 @@ export default function NewItem({
           `transition-colors hover:bg-lt_list_text_light/60 active:scale-90`
         )}
         onClick={() => handleAdd()}
+        aria-label="Add item"
       >
         <RxPlus
           className={`w-4 h-4 tablet:w-5 tablet:h-5 text-white dark:text-dt_pattern_bg`}
