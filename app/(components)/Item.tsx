@@ -85,6 +85,7 @@ function ItemBody({
           item.completed && `border-none`
         )}
         onClick={() => toggleCompleted(item.id)}
+        aria-label="Toggle completed"
       >
         {item.completed && <CompletedSVG />}
       </button>
@@ -116,6 +117,7 @@ function ItemBody({
           moving && `hidden`
         )}
         onClick={() => removeItem(item.id)}
+        aria-label="Remove item"
       >
         <RxCross2
           className={`w-4 h-4 text-lt_list_text_light dark:text-dt_list_text_light`}
